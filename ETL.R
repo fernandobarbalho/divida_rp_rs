@@ -67,3 +67,28 @@ path<- "finbraRREO_MUNEST_CalculoAcimadaLinha-ReceitasPrimarias/finbraRREO.csv"
 receita_primaria_mun_rs<- trata_finbra(path)
 
 
+
+##Geração de tabelas para demonstrativos
+despesa_primaria_rs$tipo_fluxo<-"Despesa"
+receita_primaria_rs$tipo_fluxo<-"Receita"
+
+resultado_primario_analitico_rs<-
+  bind_rows(despesa_primaria_rs, receita_primaria_rs)
+
+resultado_primario_analitico_rs %>%
+  writexl::write_xlsx("resultado_primario_analitico_rs.xlsx")
+
+saveRDS(resultado_primario_analitico_rs, "resultado_primario_analitico_rs.rds")
+
+
+despesa_primaria_mun_rs$tipo_fluxo<- "Despesa"
+receita_primaria_mun_rs$tipo_fluxo<- "Receita"
+
+resultado_primario_analitico_mun_rs<-
+  bind_rows(despesa_primaria_mun_rs, receita_primaria_mun_rs)
+
+resultado_primario_analitico_mun_rs %>%
+  writexl::write_xlsx("resultado_primario_analitico_mun_rs.xlsx")
+
+
+saveRDS(resultado_primario_analitico_mun_rs,"resultado_primario_analitico_mun_rs.rds")

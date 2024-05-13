@@ -1,0 +1,79 @@
+---
+title: "storytelling"
+output: html_document
+date: "2024-05-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+
+dividas_rs_municipios_estados <- readRDS("~/github/divida_rp_rs/dividas_rs_municipios_estados.rds")
+
+resultado_primario_analitico_rs <- readRDS("~/github/divida_rp_rs/resultado_primario_analitico_rs.rds")
+
+```
+
+
+```{r}
+
+dividas_rs_municipios_estados%>%
+  filter(tipo_de_ente == "Estado",
+         consolidado_por == "Tipo de Dívida") %>%
+  mutate(valor_r = valor_r / 10^9,
+         tipo = reorder(tipo, valor_r)) %>%
+  ggplot(aes(x= valor_r, y= tipo)) +
+  geom_col()+
+  geom_text(aes(label = round(valor_r,1)), hjust= -0.1) + 
+  theme_light()+
+  theme(
+    panel.grid = element_blank()
+  ) +
+  xlim(c(0,240)) +
+  labs(
+    title= "Perfil da dívida do Estado do RS",
+    subtitle = "Tipo de dívida. Valores em R$ bilhões",
+    caption = "Fonte: STN. Elaboração própria",
+    x= "",
+    y= ""
+  )
+  
+
+```
+
+```{r}
+dividas_rs_municipios_estados%>%
+  filter(tipo_de_ente == "Estado",
+         consolidado_por == "Tipo de credor") %>%
+  mutate(valor_r = valor_r / 10^9,
+         tipo = reorder(tipo, valor_r)) %>%
+  ggplot(aes(x= valor_r, y= tipo)) +
+  geom_col()+
+  geom_text(aes(label = round(valor_r,1)), hjust= -0.1) + 
+  theme_light()+
+  theme(
+    panel.grid = element_blank()
+  ) +
+  xlim(c(0,270)) +
+  labs(
+    title= "Perfil da dívida do Estado do RS",
+    subtitle = "Tipo de credor. Valores em R$ bilhões",
+    caption = "Fonte: STN. Elaboração própria",
+    x= "",
+    y=""
+  )
+  
+
+```
+
+```{r}
+
+fab<-
+resultado_primario_analitico_rs %>%
+  filter(tipo_fluxo=="Despesa",
+         coluna == "DOTAÇÃO ATUALIZADA",
+         conta %in% c("Pessoal e Encargos Sociais", "Juros e Encargos da Dívida (XIX)","Outras Despesas Correntes","Demais Despesas Correntes","Investimentos", "Inversões Financeiras","Demais Inversões Financeiras",""),
+         )
+
+```
+
